@@ -1,6 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import TransactionForm from './components/TransactionForm';
+import TemplateManagement from './components/TemplateManagement';
+import CustomerManagement from './components/CustomerManagement';
+import InvoiceList from './components/InvoiceList';
+import InvoiceForm from './components/InvoiceForm';
 import Accounts from './components/Accounts';
 import AuditTrail from './components/AuditTrail';
 import Automation from './components/Automation';
@@ -47,6 +51,9 @@ const Navigation = () => {
         <NavLink to="/accounts">Accounts</NavLink>
         <NavLink to="/automation">Automation</NavLink>
         <NavLink to="/audit">Audit Trail</NavLink>
+        <NavLink to="/templates">Templates</NavLink>
+        <NavLink to="/customers">Customers</NavLink>
+        <NavLink to="/invoices">Invoices</NavLink>
         <NavLink to="/guide">User Guide</NavLink>
       </div>
     </nav>
@@ -64,6 +71,11 @@ function App() {
           <Route path="/accounts" element={<Accounts />} />
           <Route path="/automation" element={<Automation />} />
           <Route path="/audit" element={<AuditTrail />} />
+          <Route path="/templates" element={<TemplateManagement />} />
+          <Route path="/customers" element={<CustomerManagement />} />
+          <Route path="/invoices" element={<InvoiceList />} />
+          <Route path="/invoices/new" element={<InvoiceForm />} />
+          <Route path="/invoices/:id/edit" element={<InvoiceForm />} />
           <Route path="/guide" element={<Guide />} />
         </Routes>
       </Router>

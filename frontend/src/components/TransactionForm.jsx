@@ -3,6 +3,7 @@ import api from '../api/api';
 
 const TransactionForm = () => {
     const [accounts, setAccounts] = useState([]);
+    const [templates, setTemplates] = useState([]);
     const [description, setDescription] = useState('');
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]); // Default to today
     const [currency, setCurrency] = useState('USD');
@@ -12,13 +13,34 @@ const TransactionForm = () => {
     ]);
 
     useEffect(() => {
-        api.get('/accounts').then(res => setAccounts(res.data));
-        // Fetch company default currency
         const companyId = localStorage.getItem('companyId') || 1;
+        api.get('/accounts', { headers: { 'X-Company-ID': companyId } })
+            .then(res => setAccounts(res.data));
+
+        api.get('/templates', { headers: { 'X-Company-ID': companyId } })
+            .then(res => setTemplates(res.data))
+            .catch(err => console.error("Failed to fetch templates", err));
+
+        // Fetch company default currency
         api.get(`/companies/${companyId}`)
             .then(res => setCurrency(res.data.currency))
             .catch(err => console.error(err));
     }, []);
+
+    const applyTemplate = (templateId) => {
+        if (!templateId) return;
+        const template = templates.find(t => t.id === parseInt(templateId));
+        if (!template) return;
+
+        if (template.description) setDescription(template.description);
+
+        const newEntries = template.entries.map(te => ({
+            accountId: te.account.id,
+            debit: '',
+            credit: ''
+        }));
+        setEntries(newEntries);
+    };
 
     const handleEntryChange = (index, field, value) => {
         const newEntries = [...entries];
@@ -81,6 +103,20 @@ const TransactionForm = () => {
         <div className="container">
             <div className="glass-panel">
                 <h2>Record Business Incident</h2>
+
+                <div style={{ marginBottom: '1.5rem', padding: '1rem', background: 'rgba(56, 189, 248, 0.1)', borderRadius: '8px', border: '1px solid var(--accent-primary)' }}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', color: 'var(--accent-primary)' }}>Quick Start: Apply Template</label>
+                    <select
+                        onChange={(e) => applyTemplate(e.target.value)}
+                        style={{ width: '100%', padding: '0.8rem', borderRadius: '6px', border: '1px solid var(--glass-border)', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
+                    >
+                        <option value="">-- Select a common business event --</option>
+                        {templates.map(t => (
+                            <option key={t.id} value={t.id}>{t.name}</option>
+                        ))}
+                    </select>
+                </div>
+
                 <form onSubmit={handleSubmit}>
                     <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
                         <div>
