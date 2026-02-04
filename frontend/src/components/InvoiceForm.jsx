@@ -223,7 +223,9 @@ const InvoiceForm = () => {
                             </select>
                         </div>
                     )}
-                    <h2 style={{ margin: 0 }}>Total: ${calculateTotal().toFixed(2)}</h2>
+                    <div style={{ textAlign: 'right', marginTop: '2rem', padding: '1rem', background: 'rgba(56, 189, 248, 0.1)', borderRadius: '8px' }}>
+                        <h2 style={{ margin: 0 }}>Total: ${calculateTotal().toFixed(2)}</h2>
+                    </div>
                 </div>
             </div>
         </div>
