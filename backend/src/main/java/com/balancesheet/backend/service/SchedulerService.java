@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@lombok.extern.slf4j.Slf4j
 public class SchedulerService {
 
     private final RecurringTransactionRepository recurringRepository;
@@ -36,7 +37,7 @@ public class SchedulerService {
         List<RecurringTransaction> dueTransactions = recurringRepository.findByNextRunDateBefore(today.plusDays(1));
 
         for (RecurringTransaction rt : dueTransactions) {
-            System.out.println("Processing recurring transaction: " + rt.getName());
+            log.info("Processing recurring transaction: {}", rt.getName());
 
             // Check if active (startDate <= today <= endDate)
             boolean isActive = true;
@@ -70,7 +71,7 @@ public class SchedulerService {
 
                 transactionRepository.save(tx);
             } else {
-                System.out.println("Skipping item " + rt.getName() + " (Inactive date range)");
+                log.info("Skipping item {} (Inactive date range)", rt.getName());
             }
 
             // Update next run date to next month

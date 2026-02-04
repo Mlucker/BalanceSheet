@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@lombok.extern.slf4j.Slf4j
 public class DataInitializer implements CommandLineRunner {
 
         private final AccountRepository accountRepository;
@@ -74,7 +75,7 @@ public class DataInitializer implements CommandLineRunner {
                         seedDemoInvoices(demoCompany, demoAccounts);
                         seedDemoTemplates(demoCompany, demoAccounts);
 
-                        System.out.println("Companies and Default accounts initialized.");
+                        log.info("Companies and Default accounts initialized.");
                 }
         }
 

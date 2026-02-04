@@ -35,7 +35,8 @@ public class AccountingController {
     }
 
     @PostMapping("/transactions")
-    public ResponseEntity<Transaction> recordTransaction(@RequestBody TransactionRequest request,
+    public ResponseEntity<Transaction> recordTransaction(
+            @jakarta.validation.Valid @RequestBody TransactionRequest request,
             @RequestHeader(value = "X-Company-ID", defaultValue = "1") Long companyId) {
         return ResponseEntity.ok(accountingService.recordTransaction(request, companyId));
     }
