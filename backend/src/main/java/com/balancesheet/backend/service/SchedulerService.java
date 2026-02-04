@@ -52,6 +52,7 @@ public class SchedulerService {
                 tx.setDate(LocalDateTime.now());
                 tx.setDescription("Auto: " + rt.getDescription() + " (" + rt.getName() + ")");
                 tx.setCompany(rt.getCompany());
+                tx.setCurrency(rt.getCompany().getCurrency()); // Set currency from company
 
                 // Debit Entry
                 JournalEntry dr = new JournalEntry();

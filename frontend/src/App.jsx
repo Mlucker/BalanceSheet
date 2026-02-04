@@ -5,6 +5,12 @@ import TemplateManagement from './components/TemplateManagement';
 import CustomerManagement from './components/CustomerManagement';
 import InvoiceList from './components/InvoiceList';
 import InvoiceForm from './components/InvoiceForm';
+import ReportsDashboard from './components/ReportsDashboard';
+import ProfitAndLoss from './components/reports/ProfitAndLoss';
+import TrialBalance from './components/reports/TrialBalance';
+import GeneralLedger from './components/reports/GeneralLedger';
+import CashFlowDashboard from './components/CashFlowDashboard';
+import ProductManagement from './components/ProductManagement';
 import Accounts from './components/Accounts';
 import AuditTrail from './components/AuditTrail';
 import Automation from './components/Automation';
@@ -53,7 +59,10 @@ const Navigation = () => {
         <NavLink to="/audit">Audit Trail</NavLink>
         <NavLink to="/templates">Templates</NavLink>
         <NavLink to="/customers">Customers</NavLink>
+        <NavLink to="/products">Products</NavLink>
         <NavLink to="/invoices">Invoices</NavLink>
+        <NavLink to="/cash-flow">Cash Flow</NavLink>
+        <NavLink to="/reports/pnl">Reports</NavLink>
         <NavLink to="/guide">User Guide</NavLink>
       </div>
     </nav>
@@ -73,9 +82,17 @@ function App() {
           <Route path="/audit" element={<AuditTrail />} />
           <Route path="/templates" element={<TemplateManagement />} />
           <Route path="/customers" element={<CustomerManagement />} />
+          <Route path="/products" element={<ProductManagement />} />
+          <Route path="/invoices" element={<InvoiceList />} />
           <Route path="/invoices" element={<InvoiceList />} />
           <Route path="/invoices/new" element={<InvoiceForm />} />
           <Route path="/invoices/:id/edit" element={<InvoiceForm />} />
+          <Route path="/cash-flow" element={<CashFlowDashboard />} />
+          <Route path="/reports" element={<ReportsDashboard />}>
+            <Route path="pnl" element={<ProfitAndLoss />} />
+            <Route path="trial-balance" element={<TrialBalance />} />
+            <Route path="general-ledger" element={<GeneralLedger />} />
+          </Route>
           <Route path="/guide" element={<Guide />} />
         </Routes>
       </Router>
