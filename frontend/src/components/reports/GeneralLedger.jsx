@@ -78,10 +78,20 @@ const GeneralLedger = () => {
                                     <td style={{ padding: '0.75rem 1rem' }}>
                                         {entry.transaction ? entry.transaction.description : 'N/A'}
                                     </td>
-                                    <td style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>
+                                    <td style={{
+                                        padding: '0.75rem 1rem',
+                                        textAlign: 'right',
+                                        color: isDebit ? '#ef4444' : 'var(--text-secondary)',
+                                        fontWeight: isDebit ? '600' : 'normal'
+                                    }}>
                                         {isDebit ? new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(entry.amount) : '-'}
                                     </td>
-                                    <td style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>
+                                    <td style={{
+                                        padding: '0.75rem 1rem',
+                                        textAlign: 'right',
+                                        color: !isDebit ? '#10b981' : 'var(--text-secondary)',
+                                        fontWeight: !isDebit ? '600' : 'normal'
+                                    }}>
                                         {!isDebit ? new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(Math.abs(entry.amount)) : '-'}
                                     </td>
                                 </tr>
