@@ -37,4 +37,8 @@ public class InvoiceItem {
     @ManyToOne
     @JoinColumn(name = "revenue_account_id", nullable = false)
     private Account revenueAccount;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product; // Optional, can be null if custom line item
 }

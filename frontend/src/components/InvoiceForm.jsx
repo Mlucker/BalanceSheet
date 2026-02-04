@@ -17,10 +17,11 @@ const InvoiceForm = () => {
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
     const [dueDate, setDueDate] = useState(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]);
     const [items, setItems] = useState([
-        { description: 'Consulting Services', quantity: 1, unitPrice: 0, revenueAccountId: '' }
+        { description: 'Consulting Services', quantity: 1, unitPrice: 0, revenueAccountId: '', productId: '' }
     ]);
     const [selectedArAccount, setSelectedArAccount] = useState('');
     const [status, setStatus] = useState('DRAFT');
+    const [products, setProducts] = useState([]);
 
     useEffect(() => {
         const companyId = localStorage.getItem('companyId') || 1;
@@ -28,6 +29,10 @@ const InvoiceForm = () => {
         // Fetch Customers
         api.get('/customers', { headers: { 'X-Company-ID': companyId } })
             .then(res => setCustomers(res.data));
+
+        // Fetch Products
+        api.get('/products', { headers: { 'X-Company-ID': companyId } })
+            .then(res => setProducts(res.data));
 
         // Fetch Accounts
         api.get('/accounts', { headers: { 'X-Company-ID': companyId } })
@@ -46,11 +51,22 @@ const InvoiceForm = () => {
     const handleItemChange = (index, field, value) => {
         const newItems = [...items];
         newItems[index][field] = value;
+
+        // Auto-fill details if product selected
+        if (field === 'productId') {
+            const product = products.find(p => p.id == value);
+            if (product) {
+                newItems[index].description = product.name;
+                newItems[index].unitPrice = product.sellingPrice;
+                // Note: Revenue Account still needs to be selected manually or defaulted in product in future features
+            }
+        }
+
         setItems(newItems);
     };
 
     const addItem = () => {
-        setItems([...items, { description: '', quantity: 1, unitPrice: 0, revenueAccountId: '' }]);
+        setItems([...items, { description: '', quantity: 1, unitPrice: 0, revenueAccountId: '', productId: '' }]);
     };
 
     const removeItem = (index) => {
@@ -73,7 +89,8 @@ const InvoiceForm = () => {
                 description: item.description,
                 quantity: parseFloat(item.quantity),
                 unitPrice: parseFloat(item.unitPrice),
-                revenueAccount: { id: parseInt(item.revenueAccountId) }
+                revenueAccount: { id: parseInt(item.revenueAccountId) },
+                product: item.productId ? { id: parseInt(item.productId) } : null
             }))
         };
 
@@ -163,7 +180,14 @@ const InvoiceForm = () => {
                 <h3>Line Items</h3>
                 <div style={{ background: 'rgba(0,0,0,0.2)', padding: '1rem', borderRadius: '8px', marginBottom: '2rem' }}>
                     {items.map((item, index) => (
-                        <div key={index} style={{ display: 'grid', gridTemplateColumns: '3fr 1fr 1fr 2fr auto', gap: '1rem', marginBottom: '1rem', alignItems: 'end' }}>
+                        <div key={index} style={{ display: 'grid', gridTemplateColumns: '2fr 3fr 1fr 1fr 2fr auto', gap: '1rem', marginBottom: '1rem', alignItems: 'end' }}>
+                            <div>
+                                <label className="stat-label">Product</label>
+                                <select value={item.productId} onChange={e => handleItemChange(index, 'productId', e.target.value)} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px' }}>
+                                    <option value="">-- Custom --</option>
+                                    {products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                                </select>
+                            </div>
                             <div>
                                 <label className="stat-label">Description</label>
                                 <input value={item.description} onChange={e => handleItemChange(index, 'description', e.target.value)} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px' }} />
