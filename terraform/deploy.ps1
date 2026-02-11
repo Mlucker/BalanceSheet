@@ -1,3 +1,7 @@
+# Determine script location
+$ScriptRoot = $PSScriptRoot
+$ProjectRoot = Split-Path $ScriptRoot -Parent
+
 # Variables
 $REGION = "eu-north-1"
 $ACCOUNT_ID = "515214870588"
@@ -9,15 +13,15 @@ aws ecr get-login-password --region $REGION | docker login --username AWS --pass
 
 # Build and Push Backend
 Write-Host "Building Backend..."
-docker build -t balancesheet-backend ../backend
-docker tag balancesheet-backend:latest "$BACKEND_REPO` :latest"
-docker push "$BACKEND_REPO` :latest"
+docker build -t balancesheet-backend "$ProjectRoot/backend"
+docker tag balancesheet-backend:latest "${BACKEND_REPO}:latest"
+docker push "${BACKEND_REPO}:latest"
 
 # Build and Push Frontend
 Write-Host "Building Frontend..."
-docker build -t balancesheet-frontend ../frontend
-docker tag balancesheet-frontend:latest "$FRONTEND_REPO` :latest"
-docker push "$FRONTEND_REPO` :latest"
+docker build -t balancesheet-frontend "$ProjectRoot/frontend"
+docker tag balancesheet-frontend:latest "${FRONTEND_REPO}:latest"
+docker push "${FRONTEND_REPO}:latest"
 
 # Force new deployment
 aws ecs update-service --cluster balancesheet-cluster --service balancesheet-backend --force-new-deployment
