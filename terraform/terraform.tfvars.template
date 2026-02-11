@@ -1,0 +1,12 @@
+# AWS Region (REQUIRED)
+aws_region = "eu-north-1"
+
+# Database Password (REQUIRED)
+# Replace with your actual secure password. Do not commit this file to Git.
+db_password = "YOUR_SECURE_PASSWORD"
+
+# Database Username (Optional, defaults to 'postgres')
+db_username = "postgres"
+
+# Project Name (Optional, defaults to 'balancesheet')
+project_name = "balancesheet"

@@ -369,11 +369,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 👤 Author
 
-**Your Name**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your Name](https://linkedin.com/in/yourprofile)
-- Portfolio: [yourportfolio.com](https://yourportfolio.com)
-
+- GitHub: [@Mlucker](https://github.com/Mlucker)
 ---
 
 ## 🙏 Acknowledgments
