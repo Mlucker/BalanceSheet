@@ -34,4 +34,7 @@ module "db" {
 
   family = "postgres14"
   major_engine_version = "14"
+
+  # Disable managed master password to use var.db_password
+  manage_master_user_password = false
 }
