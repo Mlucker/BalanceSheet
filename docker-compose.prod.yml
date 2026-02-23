@@ -1,0 +1,31 @@
+# Production overrides for Hetzner deployment.
+# Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+#
+# Before first run, copy .env.example to .env and fill in your values.
+
+services:
+  db:
+    # Do NOT expose the database port publicly on the server
+    ports: !reset []
+    environment:
+      - POSTGRES_DB=balancesheet
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    restart: unless-stopped
+
+  backend:
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/balancesheet
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    # Only reachable via the internal Docker network; nginx proxies /api to it
+    ports: !reset []
+    restart: unless-stopped
+
+  frontend:
+    # Use the production nginx config built into the image (no dev volume mount)
+    volumes: !reset []
+    ports:
+      - "80:80"
+    restart: unless-stopped
